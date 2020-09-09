@@ -27,6 +27,10 @@ else:
     
 exit_main = False
 for song in songs:
+    if song[-3:] == 'jpg':
+        print('INFO', 'Images are skipped')
+        continue
+    
     if (song in music_folder_dict.keys()):
         song_key = song
         if (music_folder_dict[song] != -1):
@@ -42,13 +46,13 @@ for song in songs:
     song_path = os.path.join(music_folder, song)    
     try:
         os.startfile(song_path)
-        score = int(input())
+        score = int(input('Provide score for this song: '))
         if score == 0:
             print('Break execution')
             exit_main = True 
         while score not in list(range(1,6))+[0]:
             print('INFO', 'Score must be between 1 and 5. Enter 0 to exit')
-            score = int(input())
+            score = int(input('Provide score for this song: '))
             if score == 0:
                 print('Break execution')
                 exit_main = True                
