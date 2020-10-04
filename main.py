@@ -8,20 +8,22 @@ Created on Thu Sep  3 19:09:52 2020
 import os
 import json
 
-music_folder = r'C:\Users\juan\Downloads\Remember'
+# music_folder = r'C:\Users\juan\Downloads\all_remember'
+music_folder = r'C:\Users\juan\Downloads\all_regaeton'
 songs = os.listdir(music_folder)
 save = False
 
-if not os.path.exists('music_folder_dict.json'):
+music_folder_dict_name = music_folder.split("\\")[-1] +'_'+ "music_folder_dict.json"
+if not os.path.exists(music_folder_dict_name):
     music_folder_dict = {}
     for song in songs: music_folder_dict[song] = -1
     if save:
-        f = open('music_folder_dict.json', 'w')
+        f = open(music_folder_dict_name, 'w')
         json.dump(music_folder_dict, f)
         f.close()
         
 else:
-    f = open('music_folder_dict.json', 'r')
+    f = open(music_folder_dict_name, 'r')
     music_folder_dict = json.load(f)
     f.close()
     
@@ -69,6 +71,6 @@ for song in songs:
         print('ERROR', song)
         
         
-f = open('music_folder_dict.json', 'w')
+f = open(music_folder_dict_name, 'w')
 json.dump(music_folder_dict, f)
 f.close()
