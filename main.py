@@ -8,7 +8,7 @@ Created on Thu Sep  3 19:09:52 2020
 import os
 import json
 
-# music_folder = r'C:\Users\juan\Downloads\all_remember'
+#music_folder = r'C:\Users\juan\Downloads\all_remember'
 music_folder = r'C:\Users\juan\Downloads\all_regaeton'
 songs = os.listdir(music_folder)
 save = False
