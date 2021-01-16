@@ -7,6 +7,7 @@ Created on Thu Sep  3 19:09:52 2020
 
 import os
 import json
+from shutil import copyfile
 
 #music_folder = r'C:\Users\juan\Downloads\all_remember'
 music_folder = r'C:\Users\juan\Downloads\all_regaeton'
@@ -74,3 +75,23 @@ for song in songs:
 f = open(music_folder_dict_name, 'w')
 json.dump(music_folder_dict, f)
 f.close()
+
+
+def copy_best_songs(music_folder, best_songs_folder):
+    if not os.path.exists(best_songs_folder):
+        os.mkdir(best_songs_folder)
+    all_best_song = os.listdir(best_songs_folder)
+    music_folder_dict_name = music_folder.split("\\")[-1] +'_'+ "music_folder_dict.json"
+    f = open(music_folder_dict_name, 'r')
+    music_folder_dict = json.load(f)
+    f.close()
+    
+    for song_name, song_score in music_folder_dict.items():
+        if song_score in [5] and song_name not in all_best_song:
+            source_song_path = os.path.join(music_folder, str(song_score)+'_'+song_name)
+            destination_song_path = os.path.join(best_songs_folder, song_name)
+            copyfile(source_song_path, destination_song_path)
+    
+best_songs_folder = r'C:\Users\juan\Downloads\best_of_'+music_folder.split("\\")[-1]
+copy_best_songs(music_folder, best_songs_folder)
+
