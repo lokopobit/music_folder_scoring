@@ -227,8 +227,6 @@ def check_if_songs_folder_matching_new_json_format(songs, music_folder_dict_name
     return all(diff_list)
 
 
-
-
 def copy_best_songs(music_folder, score=5):
     '''
     
@@ -277,7 +275,7 @@ def main(music_folder):
         print('ERROR: songs folder NOT matching new json format')
     
 
-#music_folder = r'C:\Users\juan\Downloads\all_remember'
+# music_folder = r'C:\Users\juan\Downloads\all_remember'
 music_folder = r'C:\Users\juan\Downloads\all_regaeton'
 main(music_folder)
 
