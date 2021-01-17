@@ -173,8 +173,9 @@ def score_songs(music_folder, music_folder_dict, music_folder_dict_name):
             if exit_main: break
             
             print('Updating', song_name, 'score')
-            score_key = str(score)+'_'+'Score'
+            score_key = 'Score_'+str(score)
             music_folder_dict[score_key].append(str(score)+'_'+song_name)
+            music_folder_dict['NonScored'].remove(song_name)
             new_song_path = os.path.join(music_folder, str(score)+'_'+song_name)
             os.rename(song_path, new_song_path)
                 
@@ -188,11 +189,47 @@ def score_songs(music_folder, music_folder_dict, music_folder_dict_name):
     f.close()
             
 
-def check_if_songs_folder_matching_new_json_format():
-    return 0
+def check_if_songs_folder_matching_new_json_format(songs, music_folder_dict_name):
+    '''
+    
+
+    Parameters
+    ----------
+    songs : TYPE
+        DESCRIPTION.
+    music_folder_dict_name : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    '''
+    
+    f = open(music_folder_dict_name, 'r')
+    music_folder_dict = json.load(f)
+    f.close()
+
+    diff_list = []
+    for score in range(1,6):
+        songs_folder_score = []
+        for song in songs:
+            if song[:2] == str(score)+'_':
+                songs_folder_score.append(song)       
+        songs_folder_score = set(songs_folder_score)
+        
+        songs_dict_score = music_folder_dict['Score_'+str(score)]
+        songs_dict_score = set(songs_dict_score)
+        
+        songs_diff = songs_folder_score-songs_dict_score
+        diff_list.append(songs_diff == set())
+        
+    return all(diff_list)
 
 
-def copy_best_songs(music_folder, best_songs_folder):
+
+
+def copy_best_songs(music_folder, score=5):
     '''
     
 
@@ -209,6 +246,7 @@ def copy_best_songs(music_folder, best_songs_folder):
 
     '''
     
+    best_songs_folder = music_folder+'_score_'+str(score)
     if not os.path.exists(best_songs_folder):
         os.mkdir(best_songs_folder)
     all_best_song = os.listdir(best_songs_folder)
@@ -217,26 +255,29 @@ def copy_best_songs(music_folder, best_songs_folder):
     music_folder_dict = json.load(f)
     f.close()
     
-    for song_name, song_score in music_folder_dict.items():
-        if song_score in [5] and song_name not in all_best_song:
-            source_song_path = os.path.join(music_folder, str(song_score)+'_'+song_name)
+    for song_name in music_folder_dict['Score_'+str(score)]:
+        if song_name not in all_best_song:
+            source_song_path = os.path.join(music_folder, song_name)
             destination_song_path = os.path.join(best_songs_folder, song_name)
             copyfile(source_song_path, destination_song_path)
     
 
-def main():
-    #music_folder = r'C:\Users\juan\Downloads\all_remember'
-    music_folder = r'C:\Users\juan\Downloads\all_regaeton'
+def main(music_folder):
     songs = os.listdir(music_folder)    
     music_folder_dict_name = music_folder.split("\\")[-1] +'_'+ "music_folder_dict.json"
-    best_songs_folder = r'C:\Users\juan\Downloads\best_of_'+music_folder.split("\\")[-1]
     
     # match_songs_folder_and_old_json_format(songs, music_folder_dict_name)
     # transform_json_to_new_format(music_folder_dict_name)
     music_folder_dict=create_json_if_does_not_exist_else_loaded_it(music_folder_dict_name, songs, save=False)    
     score_songs(music_folder, music_folder_dict, music_folder_dict_name)
-    check_if_songs_folder_matching_new_json_format()
-    copy_best_songs(music_folder, best_songs_folder)
+    is_check_correct = check_if_songs_folder_matching_new_json_format(songs, music_folder_dict_name)
+    if is_check_correct:
+        copy_best_songs(music_folder)
+    else:
+        print('ERROR: songs folder NOT matching new json format')
     
 
+#music_folder = r'C:\Users\juan\Downloads\all_remember'
+music_folder = r'C:\Users\juan\Downloads\all_regaeton'
+main(music_folder)
 
