@@ -7,6 +7,7 @@ Created on Thu Sep  3 19:09:52 2020
 
 import os
 import json
+import time
 from shutil import copyfile
 
 def match_songs_folder_and_old_json_format(songs, music_folder_dict_name):
@@ -271,8 +272,10 @@ def main(music_folder):
     is_check_correct = check_if_songs_folder_matching_new_json_format(songs, music_folder_dict_name)
     if is_check_correct:
         copy_best_songs(music_folder)
+        print('INFO: Bests songs copied')
     else:
         print('ERROR: songs folder NOT matching new json format')
+    time.sleep(10)
     
 
 # music_folder = r'C:\Users\juan\Downloads\all_remember'
