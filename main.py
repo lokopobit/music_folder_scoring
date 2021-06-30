@@ -281,5 +281,3 @@ def main(music_folder):
 # music_folder = r'C:\Users\juan\Downloads\all_remember'
 music_folder = r'C:\Users\juan\Downloads\all_regaeton'
 main(music_folder)
-
-jkl
